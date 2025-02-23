@@ -355,7 +355,7 @@ class ShapeRenderer(nn.Module):
         linear_image = self.cfg.get('linear_image', False)
         # train/test split
         self.database = parse_database_name(self.cfg['database_name'], self.cfg['dataset_dir'], isWhiteBG=self.cfg['isBGWhite'])
-        self.train_ids, self.test_ids = get_database_split(self.database, split_manul=self.cfg['split_manul'])
+        self.train_ids, self.test_ids = get_database_split(self.database, split_manul=self.cfg['split_manul'], split_borderline=self.cfg.get('split_borderline', 100))
         self.train_ids = np.asarray(self.train_ids)
 
         self.train_imgs_info = build_imgs_info(self.database, self.train_ids, apply_mask_loss=self.cfg['apply_mask_loss'])
@@ -457,7 +457,7 @@ class ShapeRenderer(nn.Module):
             'human_poses': poses[idxs[..., 0], :3, :],
         }
 
-        if is_train:
+        if is_train and self.cfg['apply_mask_loss']:
             masks = imgs_info['masks'].reshape(imn, h * w).float().reshape(rn, 1).to(device)
             ray_batch['masks'] = masks
         return ray_batch, rn, h, w
@@ -470,7 +470,7 @@ class ShapeRenderer(nn.Module):
         else:
             cam_cen[..., 2] = 0
 
-        Y = torch.zeros([pn, 3], device=poses.device)#.expand(pn, 3)
+        Y = torch.zeros([1, 3], device=poses.device).expand(pn, 3).clone()
         Y[:, 2] = -1.0
         Z = torch.clone(poses[:, 2, :3]).to(poses.device)  # pn, 3
         Z[:, 2] = 0
