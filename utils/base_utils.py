@@ -30,7 +30,7 @@ def rgb_lpips(np_gt, np_im, net_name, device):
     return __LPIPS__[net_name](gt, im, normalize=True).item()
 
 #######################sample#####################################
-import ghalton
+# import ghalton
 
 def getHaltonSamples(dim_num, sample_num):
     seq = ghalton.Halton(dim_num)
