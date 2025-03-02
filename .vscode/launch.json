@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "--cfg",
-                "configs/shape/custom/BrownHorse.yaml"
+                "configs/shape/custom/goldenqilin.yaml"
             ]
         }
     ]

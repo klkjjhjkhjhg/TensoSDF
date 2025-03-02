@@ -1,11 +1,11 @@
-name: goldenqilin_mat
+name: GoldenQiLin_mat
 isMaterial: true
 
 ####network#####
 network: material
-database_name: custom/goldenqilin/raw_1600
-mesh: data/custom_results/meshes/goldenqilin_shape-180000-crop.ply
-geo_model_path: data/model/goldenqilin_shape/model.pth
+database_name: custom/GoldenQiLin/raw_1600
+mesh: data/meshes/GoldenQiLin_shape-180000.ply
+geo_model_path: data/model/GoldenQiLin_shape/model.pth
 
 reg_diffuse_light: true
 reg_diffuse_light_lambda: 0.1
@@ -13,7 +13,7 @@ reg_mat: true
 shader_cfg:
   diffuse_sample_num: 512
   specular_sample_num: 256
-  outer_light_version: sphere_direction
+  outer_light_version: direction
   light_exp_max: 5.0
   inner_light_exp_max: 5.0
   human_lights: true
@@ -25,15 +25,15 @@ key_metric_name: psnr
 
 ####dataset#####
 train_dataset_type: dummy
-dataset_dir: /home/riga/NeRF/nerf_data/customData
+dataset_dir: data/custom
 train_dataset_cfg:
-  database_name: custom/goldenqilin/raw_1600
+  database_name: custom/GoldenQiLin/raw_1600
 val_set_list:
   -
     name: val
     type: dummy
     cfg:
-      database_name: custom/goldenqilin/raw_1600
+      database_name: custom/GoldenQiLin/raw_1600
 
 ####trainier####
 optimizer_type: adam
