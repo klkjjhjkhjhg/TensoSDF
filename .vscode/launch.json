@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "--cfg",
-                "configs/shape/custom/BrownHorse.yaml"
+                "data/model/CeramicsHorse3Wopl_shape_Rad6W/recording/config.yaml"
             ]
         }
     ]

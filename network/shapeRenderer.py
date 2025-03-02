@@ -1042,6 +1042,7 @@ class ShapeRenderer(nn.Module):
             if not self.cfg['predict_BG'] and self.cfg['isBGWhite']:
                 radiance = (sampled_radiance * weights[..., None]).sum(dim=1) + (1 - acc_map)
             else:
+                sampled_radiance[outer_mask] = sampled_color[outer_mask].clone()
                 radiance = (sampled_radiance * weights[..., None]).sum(dim=1)
             roughness_weights = (roughness * weights[..., None]).sum(dim=1) # rn, 1
             outputs['radiance'] = radiance
