@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "--cfg",
-                "configs/shape/custom/energycore.yaml"
+                "configs/shape/syn/helmet.yaml"
             ]
         }
     ]

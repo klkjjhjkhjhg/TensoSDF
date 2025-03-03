@@ -511,7 +511,7 @@ class TensoSDFSynDatabase(BaseDatabase):
                 if isWhiteBG:
                     rgb = ((img[..., :3] * mask + (1 - mask)) * 255.).astype(np.uint8)
                 else:
-                    rgb = (img[..., :3] * mask * 255.).astype(np.uint8)
+                    rgb = (img[..., :3] * 255.).astype(np.uint8)
                 self.imgs_all.append(rgb)
                 self.masks_all.append(mask)
                 self.pose_all.append(np.array(frname['transform_matrix']))
