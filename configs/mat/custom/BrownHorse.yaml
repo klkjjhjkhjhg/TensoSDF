@@ -1,11 +1,11 @@
-name: GoldenQiLin_mat
+name: BrownHorseWopl_mat
 isMaterial: true
 
 ####network#####
 network: material
-database_name: custom/GoldenQiLin/raw_1600
-mesh: data/meshes/GoldenQiLin_shape-180000.ply
-geo_model_path: data/model/GoldenQiLin_shape/model.pth
+database_name: custom/BrownHorseWopl/raw_1600
+mesh: data/meshes/BrownHorseWopl_shape-180000.ply
+geo_model_path: data/model/BrownHorseWopl_shape/model.pth
 
 reg_diffuse_light: true
 reg_diffuse_light_lambda: 0.1
@@ -25,15 +25,16 @@ key_metric_name: psnr
 
 ####dataset#####
 train_dataset_type: dummy
-dataset_dir: data/custom
+dataset_dir: /home/db3/zlh/code/ActiveMVS/data/custom
 train_dataset_cfg:
-  database_name: custom/GoldenQiLin/raw_1600
+  database_name: custom/BrownHorseWopl/raw_1600
 val_set_list:
   -
     name: val
     type: dummy
     cfg:
-      database_name: custom/GoldenQiLin/raw_1600
+      database_name: custom/BrownHorseWopl/raw_1600
+linear_image: True
 
 ####trainier####
 optimizer_type: adam

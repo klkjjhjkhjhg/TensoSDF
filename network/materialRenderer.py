@@ -14,6 +14,7 @@ from network.fields import TensoSDF
 from network.other_field import SingleVarianceNetwork
 from utils.network_utils import get_intersection, get_weights, sample_pdf
 import time
+from utils.raw_utils import linear_to_srgb
 
 def build_imgs_info(database:BaseDatabase, img_ids, is_nerf=False):
     images = [database.get_image(img_id) for img_id in img_ids]
@@ -175,6 +176,7 @@ class MaterialRenderer(nn.Module):
         print(f'Geometry starts from step {step}')
 
     def _init_dataset(self, training):
+        linear_image = self.cfg.get('linear_image', False)
         # train/test split
         self.database = parse_database_name(self.cfg['database_name'], self.cfg['dataset_dir'])
         self.train_ids, self.test_ids = get_database_split(self.database, split_manul=self.cfg['split_manul'])
@@ -183,10 +185,12 @@ class MaterialRenderer(nn.Module):
         if training:
             self.train_imgs_info = build_imgs_info(self.database, self.train_ids)
             self.train_imgs_info = imgs_info_to_torch(self.train_imgs_info, 'cpu')
+            if linear_image: self.train_imgs_info['imgs'] = linear_to_srgb(self.train_imgs_info['imgs'])
             self.train_num = len(self.train_ids)
 
             self.test_imgs_info = build_imgs_info(self.database, self.test_ids)
             self.test_imgs_info = imgs_info_to_torch(self.test_imgs_info, 'cpu')
+            if linear_image: self.test_imgs_info['imgs'] = linear_to_srgb(self.test_imgs_info['imgs'])
             self.test_num = len(self.test_ids)
             print(f'Acutal splits num: train -> {self.train_num}, val -> {self.test_num}')
 

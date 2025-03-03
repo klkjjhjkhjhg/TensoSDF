@@ -352,19 +352,22 @@ class ShapeRenderer(nn.Module):
         return grad_vars
         
     def _init_dataset(self):
+        linear_image = self.cfg.get('linear_image', False)
         # train/test split
         self.database = parse_database_name(self.cfg['database_name'], self.cfg['dataset_dir'], isWhiteBG=self.cfg['isBGWhite'])
-        self.train_ids, self.test_ids = get_database_split(self.database, split_manul=self.cfg['split_manul'])
+        self.train_ids, self.test_ids = get_database_split(self.database, split_manul=self.cfg['split_manul'], split_borderline=self.cfg.get('split_borderline', 100))
         self.train_ids = np.asarray(self.train_ids)
 
         self.train_imgs_info = build_imgs_info(self.database, self.train_ids, apply_mask_loss=self.cfg['apply_mask_loss'])
         self.train_imgs_info = imgs_info_to_torch(self.train_imgs_info, 'cpu')
+        if linear_image: self.train_imgs_info['imgs'] = linear_to_srgb(self.train_imgs_info['imgs'])
         b, _, h, w = self.train_imgs_info['imgs'].shape
         print(f'training size {h} {w} ...')
         self.train_num = len(self.train_ids)
 
         self.test_imgs_info = build_imgs_info(self.database, self.test_ids, apply_mask_loss=self.cfg['apply_mask_loss'])
         self.test_imgs_info = imgs_info_to_torch(self.test_imgs_info, 'cpu')
+        if linear_image: self.test_imgs_info['imgs'] = linear_to_srgb(self.test_imgs_info['imgs'])
         self.test_num = len(self.test_ids)
         print(f'Acutal splits num: train -> {self.train_num}, val -> {self.test_num}')
         # clean the data if we already have
@@ -454,7 +457,7 @@ class ShapeRenderer(nn.Module):
             'human_poses': poses[idxs[..., 0], :3, :],
         }
 
-        if is_train:
+        if is_train and self.cfg['apply_mask_loss']:
             masks = imgs_info['masks'].reshape(imn, h * w).float().reshape(rn, 1).to(device)
             ray_batch['masks'] = masks
         return ray_batch, rn, h, w
@@ -467,7 +470,7 @@ class ShapeRenderer(nn.Module):
         else:
             cam_cen[..., 2] = 0
 
-        Y = torch.zeros([1, 3], device=poses.device).expand(pn, 3)
+        Y = torch.zeros([1, 3], device=poses.device).expand(pn, 3).clone()
         Y[:, 2] = -1.0
         Z = torch.clone(poses[:, 2, :3]).to(poses.device)  # pn, 3
         Z[:, 2] = 0
@@ -1039,6 +1042,7 @@ class ShapeRenderer(nn.Module):
             if not self.cfg['predict_BG'] and self.cfg['isBGWhite']:
                 radiance = (sampled_radiance * weights[..., None]).sum(dim=1) + (1 - acc_map)
             else:
+                sampled_radiance[outer_mask] = sampled_color[outer_mask].clone()
                 radiance = (sampled_radiance * weights[..., None]).sum(dim=1)
             roughness_weights = (roughness * weights[..., None]).sum(dim=1) # rn, 1
             outputs['radiance'] = radiance

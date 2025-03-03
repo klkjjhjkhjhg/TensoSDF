@@ -1,8 +1,8 @@
-name: GoldenQiLin_shape_sRGB
+name: MotorWopl_shape_b01_01_tensosdf
 
 ####network#####
 network: shape
-database_name: custom/GoldenQiLin/raw_1600 # this means we run reconstruction on the image resolution of 1024
+database_name: custom/MotorWopl/raw_1600 # this means we run reconstruction on the image resolution of 1024
 shader_config:
   human_light: false # we model the reflection capturer
 apply_occ_loss: true # apply the occlusion loss
@@ -28,18 +28,19 @@ freeze_inv_s_step: 8000 # we freeze the 1/s in the NeuS for 15k steps for initia
 hessian_weight: 0.0005
 sparse_weight: 0.05
 gaussian_weight: 0.00001
+linear_image: true
 
 ####dataset#####
 train_dataset_type: dummy
 dataset_dir: data/custom
 train_dataset_cfg:
-  database_name: custom/GoldenQiLin/raw_1600
+  database_name: custom/MotorWopl/raw_1600
 val_set_list:
   -
     name: val
     type: dummy
     cfg:
-      database_name: custom/GoldenQiLin/raw_1600
+      database_name: custom/MotorWopl/raw_1600
 
 ####trainier####
 optimizer_type: adam

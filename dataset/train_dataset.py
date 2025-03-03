@@ -13,7 +13,7 @@ class DummyDataset(Dataset):
             split_manul = False
             if self.cfg['split_manul']:
                 split_manul = True
-            train_ids, test_ids = get_database_split(database, 'validation', split_manul)
+            train_ids, test_ids = get_database_split(database, 'validation', split_manul, split_borderline=cfg.get('split_borderline', 100))
             self.train_num = len(train_ids)
             self.test_num = len(test_ids)
         self.is_train = is_train

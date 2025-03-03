@@ -1,8 +1,14 @@
-name: GoldenQiLin_shape_sRGB
+name: GnomeNight_shape
 
 ####network#####
 network: shape
-database_name: custom/GoldenQiLin/raw_1600 # this means we run reconstruction on the image resolution of 1024
+database_name: tensoSDF/GnomeWopl
+predict_BG: false
+isBGWhite: true
+split_manul: true
+split_borderline: 54
+nerfDataType: True
+
 shader_config:
   human_light: false # we model the reflection capturer
 apply_occ_loss: true # apply the occlusion loss
@@ -12,8 +18,6 @@ has_radiance_field: true
 radiance_field_step: 40000
 apply_gaussian_loss: false
 gaussianLoss_step: 40000
-predict_BG: true
-isBGWhite: false
 downsample_ratio: 0.5
 alphaMask_thres: 0.0001
 mul_length: 0
@@ -31,22 +35,26 @@ gaussian_weight: 0.00001
 
 ####dataset#####
 train_dataset_type: dummy
-dataset_dir: data/custom
+dataset_dir: data/difflights/night           # !!!! change your dataset dir !!!!
 train_dataset_cfg:
-  database_name: custom/GoldenQiLin/raw_1600
+  database_name: tensoSDF/GnomeWopl
+  split_manul: true
+  split_borderline: 54
 val_set_list:
   -
     name: val
     type: dummy
     cfg:
-      database_name: custom/GoldenQiLin/raw_1600
+      database_name: tensoSDF/GnomeWopl
+      split_manul: true
+      split_borderline: 54
 
 ####trainier####
 optimizer_type: adam
 lr_type: warm_up_cos
 lr_cfg: {}
 total_step: 180000 # 300000
-val_interval: 2500 # 5000
+val_interval: 5000 # 5000
 save_interval: 1000
 train_log_step: 20
 N_voxel_init: 2097153 # 128**3 + 1
@@ -61,4 +69,4 @@ sdf_dim: 256
 app_dim: 128
 
 ###Mesh extraction###
-blend_ratio: 0.5
+blend_ratio: 0.0

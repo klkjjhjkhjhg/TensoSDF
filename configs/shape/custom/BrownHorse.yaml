@@ -1,8 +1,8 @@
-name: GoldenQiLin_shape_sRGB
+name: BrownHorseWopl_shape
 
 ####network#####
 network: shape
-database_name: custom/GoldenQiLin/raw_1600 # this means we run reconstruction on the image resolution of 1024
+database_name: custom/BrownHorseWopl/raw_1600 # this means we run reconstruction on the image resolution of 1024
 shader_config:
   human_light: false # we model the reflection capturer
 apply_occ_loss: true # apply the occlusion loss
@@ -31,15 +31,16 @@ gaussian_weight: 0.00001
 
 ####dataset#####
 train_dataset_type: dummy
-dataset_dir: data/custom
+dataset_dir: /home/db3/zlh/code/ActiveMVS/data/custom
 train_dataset_cfg:
-  database_name: custom/GoldenQiLin/raw_1600
+  database_name: custom/BrownHorseWopl/raw_1600
 val_set_list:
   -
     name: val
     type: dummy
     cfg:
-      database_name: custom/GoldenQiLin/raw_1600
+      database_name: custom/BrownHorseWopl/raw_1600
+linear_image: True
 
 ####trainier####
 optimizer_type: adam
@@ -61,4 +62,4 @@ sdf_dim: 256
 app_dim: 128
 
 ###Mesh extraction###
-blend_ratio: 0.5
+blend_ratio: 0.1
